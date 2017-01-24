@@ -6,6 +6,7 @@ public class BgManager : MonoBehaviour
 {
     [SerializeField]
     GameObject playerSprite;
+	GameObject[][] baseTiles;
 
     // Use this for initialization
     void Start()
@@ -21,13 +22,14 @@ public class BgManager : MonoBehaviour
         // transform.position = new Vector3(basePose.x + tileSize * tileScale * 2.0f, basePose.y + tileSize * tileScale * 1.5f);
         int[][] tileMap = {
             new int[]{ 0, 1, 3, 3, 5 },
-            new int[]{ 24, 27, 99, 99, 77 },
-            new int[]{ 24, 27, 99, 99, 77 },
-            new int[]{120, 121, 122, 122, 125}
+            new int[]{ 22, 25, 88, 89, 90 },
+            new int[]{ 22, 26, 89, 88, 68 },
+            new int[]{107, 108, 109, 111, 112}
         };
-        for (int y = 0; y < tileMap.Length; ++y)
+		// baseTiles = new GameObject[tileY][tileX];
+		for (int y = 0; y < tileY; ++y)
         {
-            for (int x = 0; x < tileMap[y].Length; ++x)
+			for (int x = 0; x < tileX; ++x)
             {
                 var tile = new GameObject("Sprite" + x + "-" + y);
                 var tileRenderer = tile.AddComponent<SpriteRenderer>();
@@ -36,6 +38,7 @@ public class BgManager : MonoBehaviour
                 tileRenderer.transform.localScale = new Vector3(tileScale, tileScale);
                 tileRenderer.transform.parent = transform;
                 tile.AddComponent<BgTile>().SetParent(this);
+				// baseTiles [y] [x] = tile;
             }
         }
     }

@@ -51,11 +51,11 @@ public class BgTile : MonoBehaviour {
     {
         if(bgparent.isPlayerOn(this))
         {
-            Debug.Log("player is none.");
+            Debug.Log("player is none this tile." + name);
         }
         else
         {
-            Debug.Log("player on this tile.");
+            Debug.Log("player on this tile." + name);
         }
     }
 }
