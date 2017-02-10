@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 968e9c8bf28fa264aafe17e4bfdf7077
-timeCreated: 1484540628
+timeCreated: 1486716409
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -1527,7 +1527,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 96
-        y: 112
+        y: 113
         width: 16
         height: 16
       alignment: 0
@@ -2293,8 +2293,8 @@ TextureImporter:
       name: baseTiles_150
       rect:
         serializedVersion: 2
-        x: 320
-        y: 80
+        x: 368
+        y: 176
         width: 16
         height: 16
       alignment: 0
