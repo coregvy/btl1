@@ -34,6 +34,10 @@ public class BgManager : MonoBehaviour
 			new int[]{ 136, 136, 6, 136, 136, 136, 136, 91, 136, 136, 136 }
         };
 		var tileBasePos = new Vector3 (-6, 6, 0);
+
+		createChar ("char1", 3, 3);
+		createChar ("char2", 4, 4);
+
 		// baseTiles = new GameObject[tileY][tileX];
 		for (int y = 0; y < tileY; ++y)
         {
@@ -74,5 +78,30 @@ public class BgManager : MonoBehaviour
 	}
 	public static Vector3 getWorldPosition(int x, int y, float z){
 		return new Vector3 (getWorldPositionX (x), getWorldPositionY (y), z);
+	}
+
+	public void createChar(string name, int posX, int posY){
+		var character = new GameObject (name, typeof(SpriteRenderer));
+		var charMan = character.AddComponent<CharacterManager> ();
+		charMan.transform.parent = transform;
+		character.transform.localScale = new Vector2 (6, 6);
+		charMan.setPosition (posX, posY);
+		var anim = character.AddComponent<Animator> ();
+		anim.runtimeAnimatorController = RuntimeAnimatorController.Instantiate (Resources.Load<RuntimeAnimatorController> ("aPlayer_0"));
+	}
+	GameObject statusWindow;
+	public GameObject createStatusWindow() {
+		if(statusWindow!=null) {
+		}
+		statusWindow = new GameObject("statusWindow");
+		var render = statusWindow.AddComponent<SpriteRenderer>();
+		render.sprite = Resources.Load<Sprite>("frame");
+		return statusWindow;
+	}
+	public void deleteStatusWindow(){
+		if(statusWindow != null) {
+			Destroy(statusWindow);
+			statusWindow = null;
+		}
 	}
 }

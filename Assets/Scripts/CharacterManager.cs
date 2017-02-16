@@ -5,11 +5,11 @@ using UnityEngine;
 public class CharacterManager : MonoBehaviour {
 
 	[SerializeField]
-	CharacterStatus status;
+	CharacterStatus status = new CharacterStatus();
 	// Use this for initialization
 	void Start () {
-		status = new CharacterStatus ();
-		setPosition (3, 3);
+		// status = new CharacterStatus ();
+		// setPosition (3, 3);
 	}
 	
 	// Update is called once per frame
@@ -22,5 +22,13 @@ public class CharacterManager : MonoBehaviour {
 		var pos = BgManager.getWorldPosition (x, y, -1);
 		Debug.Log ("player pos: " + pos);
 		transform.position = pos;
+	}
+	BgManager bgMan;
+	public void setBgManager(BgManager bg){
+		bgMan = bg;
+	}
+
+	public void openStatusWindow() {
+		bgMan.createStatusWindow ();
 	}
 }
