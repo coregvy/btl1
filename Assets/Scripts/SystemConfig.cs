@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SystemConfig {
-	public float tileSize{ get; set; }
-	public float tileScale{ get; set; }
+public class SystemConfig
+{
+    public float tileSize { get; set; }
+    public float tileScale { get; set; }
 }

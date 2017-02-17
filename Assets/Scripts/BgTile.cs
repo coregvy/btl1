@@ -2,10 +2,11 @@
 using System.Collections;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public class BgTile : MonoBehaviour {
+public class BgTile : MonoBehaviour
+{
 
     BgManager bgparent;
-    
+
     public void SetParent(BgManager bgparent)
     {
         this.bgparent = bgparent;
@@ -13,7 +14,7 @@ public class BgTile : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        GetComponent<BoxCollider2D> ().size = new Vector2 (0.16f, 0.16f);
+        GetComponent<BoxCollider2D>().size = new Vector2(0.16f, 0.16f);
     }
 
     // Update is called once per frame
@@ -49,7 +50,7 @@ public class BgTile : MonoBehaviour {
     }
     void OnMouseUp()
     {
-        if(bgparent.isPlayerOn(this))
+        if (bgparent.isPlayerOn(this))
         {
             Debug.Log("player is none this tile." + name);
         }

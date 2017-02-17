@@ -2,6 +2,6 @@
 
 public class GameConfig
 {
-    public bool isFullScreen{ get; set; }
+    public bool isFullScreen { get; set; }
 }
 
