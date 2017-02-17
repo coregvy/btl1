@@ -50,13 +50,14 @@ public class BgTile : MonoBehaviour
     }
     void OnMouseUp()
     {
-        if (bgparent.isPlayerOn(this))
+        var onChar = bgparent.onTileCharacter(this);
+        if (onChar!=null)
         {
-            Debug.Log("player is none this tile." + name);
+            Debug.Log(onChar.name + " is on this tile. " + name);
         }
         else
         {
-            Debug.Log("player on this tile." + name);
+            Debug.Log("player none this tile. " + name);
         }
     }
 }

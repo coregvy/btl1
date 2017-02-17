@@ -11,6 +11,7 @@ public class BgManager : MonoBehaviour
 
     static GameMain gameMain = GameMain.Instance;
     static Vector2 tileBasePose = new Vector2(-6, 6);
+    List<GameObject> characters;
 
     // Use this for initialization
     void Start()
@@ -69,6 +70,16 @@ public class BgManager : MonoBehaviour
         }
         return false;
     }
+    public GameObject onTileCharacter(BgTile tile)
+    {
+        var tilePos = tile.transform.position;
+        foreach(var character in characters)
+        {
+            if (tilePos == character.transform.position)
+                return character;
+        }
+        return null;
+    }
 
     public static float getWorldPositionX(int x)
     {
@@ -92,16 +103,24 @@ public class BgManager : MonoBehaviour
         charMan.setPosition(posX, posY);
         var anim = character.AddComponent<Animator>();
         anim.runtimeAnimatorController = RuntimeAnimatorController.Instantiate(Resources.Load<RuntimeAnimatorController>("aPlayer_0"));
+        characters.Add(character);
     }
     GameObject statusWindow;
     public GameObject createStatusWindow()
     {
         if (statusWindow != null)
         {
+            deleteStatusWindow();
         }
         statusWindow = new GameObject("statusWindow");
         var render = statusWindow.AddComponent<SpriteRenderer>();
         render.sprite = Resources.Load<Sprite>("frame");
+        // status rendering
+        var parent = GameObject.Find("UI");
+        var statusText = new GameObject("statusText");
+        var text = statusText.AddComponent<GUIText>();
+        text.text = "status";
+        statusText.transform.parent = parent.transform;
         return statusWindow;
     }
     public void deleteStatusWindow()
