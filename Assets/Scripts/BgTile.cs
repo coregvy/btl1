@@ -6,6 +6,8 @@ public class BgTile : MonoBehaviour
 {
 
     BgManager bgparent;
+	public int posX{ get; private set; }
+	public int posY{ get; private set; }
 
     public void SetParent(BgManager bgparent)
     {
@@ -40,6 +42,10 @@ public class BgTile : MonoBehaviour
         Debug.Log("bg mouse down: " + name);
         this.screenPoint = Camera.main.WorldToScreenPoint(transform.parent.transform.position);
         this.offset = transform.parent.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+		var onChar = bgparent.onTileCharacter (this);
+		if (onChar != null) {
+			onChar.GetComponent<CharacterManager> ().openStatusWindow ();
+		}
     }
 
     void OnMouseDrag()
@@ -60,4 +66,12 @@ public class BgTile : MonoBehaviour
             Debug.Log("player none this tile. " + name);
         }
     }
+	public void setPosition(int x, int y)
+	{
+		posX = x;
+		posY = y;
+		var pos = BgManager.getWorldPosition(x, y, -1);
+		Debug.Log("player pos: " + pos);
+		transform.position = pos;
+	}
 }

@@ -27,6 +27,10 @@ public class CharacterManager : MonoBehaviour
         Debug.Log("player pos: " + pos);
         transform.position = pos;
     }
+
+	public CharacterStatus getCharacterStatus() {
+		return status;
+	}
     BgManager bgMan;
     public void setBgManager(BgManager bg)
     {
@@ -35,6 +39,7 @@ public class CharacterManager : MonoBehaviour
 
     public void openStatusWindow()
     {
+		Debug.Log ("open status window: " + name);
         bgMan.createStatusWindow();
     }
 }

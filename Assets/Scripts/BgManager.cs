@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class BgManager : MonoBehaviour
 {
-    [SerializeField]
-    GameObject playerSprite;
-
     GameObject[][] baseTiles;
 
     static GameMain gameMain = GameMain.Instance;
@@ -16,7 +13,6 @@ public class BgManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Debug.Log("start: " + playerSprite.GetType());
         Sprite[] tiles = Resources.LoadAll<Sprite>("baseTiles");
         // var basePose = new Vector2(0, 0);
         const int tileX = 11;
@@ -36,6 +32,7 @@ public class BgManager : MonoBehaviour
         };
         var tileBasePos = new Vector3(-6, 6, 0);
 
+		characters = new List<GameObject> ();
         createChar("char1", 3, 3);
         createChar("char2", 4, 4);
 
@@ -46,11 +43,13 @@ public class BgManager : MonoBehaviour
             {
                 var tile = new GameObject("Sprite" + x + "-" + y);
                 var tileRenderer = tile.AddComponent<SpriteRenderer>();
+				var bgt = tile.AddComponent<BgTile> ();
                 tileRenderer.sprite = tiles[tileMap[y][x]];
-                tileRenderer.transform.position = new Vector3(getWorldPositionX(x), getWorldPositionY(y), 10.0f);
+                // tileRenderer.transform.position = new Vector3(getWorldPositionX(x), getWorldPositionY(y), 10.0f);
+				bgt.setPosition (x, y);
                 tileRenderer.transform.localScale = new Vector3(gameMain.systemConfig.tileScale, gameMain.systemConfig.tileScale);
                 tileRenderer.transform.parent = transform;
-                tile.AddComponent<BgTile>().SetParent(this);
+                bgt.SetParent(this);
                 // baseTiles [y] [x] = tile;
             }
         }
@@ -62,20 +61,13 @@ public class BgManager : MonoBehaviour
 
     }
 
-    public bool isPlayerOn(BgTile tile)
-    {
-        if (tile.transform.position == playerSprite.transform.position)
-        {
-            return true;
-        }
-        return false;
-    }
     public GameObject onTileCharacter(BgTile tile)
     {
         var tilePos = tile.transform.position;
         foreach(var character in characters)
         {
-            if (tilePos == character.transform.position)
+			var cs = character.GetComponent<CharacterManager> ().getCharacterStatus ();
+			if (tile.posX == cs.posX && tile.posY == cs.posY)
                 return character;
         }
         return null;
@@ -99,12 +91,14 @@ public class BgManager : MonoBehaviour
         var character = new GameObject(name, typeof(SpriteRenderer));
         var charMan = character.AddComponent<CharacterManager>();
         charMan.transform.parent = transform;
+		charMan.setBgManager (this);
         character.transform.localScale = new Vector2(6, 6);
         charMan.setPosition(posX, posY);
         var anim = character.AddComponent<Animator>();
         anim.runtimeAnimatorController = RuntimeAnimatorController.Instantiate(Resources.Load<RuntimeAnimatorController>("aPlayer_0"));
         characters.Add(character);
     }
+
     GameObject statusWindow;
     public GameObject createStatusWindow()
     {
@@ -112,6 +106,7 @@ public class BgManager : MonoBehaviour
         {
             deleteStatusWindow();
         }
+		// todo prefab使ってほしい
         statusWindow = new GameObject("statusWindow");
         var render = statusWindow.AddComponent<SpriteRenderer>();
         render.sprite = Resources.Load<Sprite>("frame");
@@ -120,7 +115,10 @@ public class BgManager : MonoBehaviour
         var statusText = new GameObject("statusText");
         var text = statusText.AddComponent<GUIText>();
         text.text = "status";
-        statusText.transform.parent = parent.transform;
+		statusWindow.transform.localScale = new Vector3 (1, 2, 1);
+		statusWindow.transform.parent = parent.transform;
+		statusText.transform.parent = statusWindow.transform;
+		statusWindow.transform.position = new Vector3 (-8.6f, 3.0f, -2);
         return statusWindow;
     }
     public void deleteStatusWindow()
