@@ -52,7 +52,8 @@ public class BgTile : MonoBehaviour
     {
         Vector3 currentScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
         Vector3 currentPosition = Camera.main.ScreenToWorldPoint(currentScreenPoint) + this.offset;
-        transform.parent.transform.position = currentPosition;
+		bgparent.moveWorld (currentPosition);
+        //transform.parent.transform.position = currentPosition;
     }
     void OnMouseUp()
     {

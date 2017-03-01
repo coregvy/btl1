@@ -5,7 +5,8 @@ using UnityEngine;
 public class BgManager : MonoBehaviour
 {
     GameObject[][] baseTiles;
-
+	[SerializeField]
+	Rect movableField = new Rect(-7,4,16,20);
     static GameMain gameMain = GameMain.Instance;
     static Vector2 tileBasePose = new Vector2(-6, 6);
     List<GameObject> characters;
@@ -106,19 +107,8 @@ public class BgManager : MonoBehaviour
         {
             deleteStatusWindow();
         }
-		// todo prefab使ってほしい
-        statusWindow = new GameObject("statusWindow");
-        var render = statusWindow.AddComponent<SpriteRenderer>();
-        render.sprite = Resources.Load<Sprite>("frame");
-        // status rendering
-        var parent = GameObject.Find("UI");
-        var statusText = new GameObject("statusText");
-        var text = statusText.AddComponent<GUIText>();
-        text.text = "status";
-		statusWindow.transform.localScale = new Vector3 (1, 2, 1);
-		statusWindow.transform.parent = parent.transform;
-		statusText.transform.parent = statusWindow.transform;
-		statusWindow.transform.position = new Vector3 (-8.6f, 3.0f, -2);
+		statusWindow = (GameObject)Resources.Load("Prefabs/statusWindow");
+		Instantiate (statusWindow, GameObject.Find ("UI").transform);
         return statusWindow;
     }
     public void deleteStatusWindow()
@@ -129,4 +119,8 @@ public class BgManager : MonoBehaviour
             statusWindow = null;
         }
     }
+	public void moveWorld(Vector3 pos) {
+		
+		transform.position = pos;
+	}
 }
