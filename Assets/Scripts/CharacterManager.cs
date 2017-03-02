@@ -10,6 +10,9 @@ public class CharacterManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		status.name = name;
+		status.hp = 10;
+		status.power = 5;
         // status = new CharacterStatus ();
         // setPosition (3, 3);
     }
@@ -40,6 +43,6 @@ public class CharacterManager : MonoBehaviour
     public void openStatusWindow()
     {
 		Debug.Log ("open status window: " + name);
-        bgMan.createStatusWindow();
+		bgMan.createStatusWindow(status);
     }
 }

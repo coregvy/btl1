@@ -6,9 +6,9 @@ public class BgManager : MonoBehaviour
 {
     GameObject[][] baseTiles;
 	[SerializeField]
-	Rect movableField = new Rect(-7,4,16,20);
+	Rect movableField = new Rect(-23,4,16,20);
     static GameMain gameMain = GameMain.Instance;
-    static Vector2 tileBasePose = new Vector2(-6, 6);
+    //static Vector2 tileBasePose = new Vector2(-6, 6);
     List<GameObject> characters;
 
     // Use this for initialization
@@ -31,7 +31,7 @@ public class BgManager : MonoBehaviour
             new int[]{ 136,  107, 108, 109, 108, 109, 108, 109, 111, 112, 136 },
             new int[]{ 136, 136, 6, 136, 136, 136, 136, 91, 136, 136, 136 }
         };
-        var tileBasePos = new Vector3(-6, 6, 0);
+        //var tileBasePos = new Vector3(-6, 6, 0);
 
 		characters = new List<GameObject> ();
         createChar("char1", 3, 3);
@@ -55,6 +55,7 @@ public class BgManager : MonoBehaviour
             }
         }
         transform.position = new Vector3(-14, 6, 0);
+		Debug.Log ($"movableField x: {movableField.xMin} - {movableField.xMax}");
     }
 
     void Update()
@@ -101,26 +102,31 @@ public class BgManager : MonoBehaviour
     }
 
     GameObject statusWindow;
-    public GameObject createStatusWindow()
+    public GameObject createStatusWindow(CharacterStatus status)
     {
         if (statusWindow != null)
         {
             deleteStatusWindow();
         }
-		statusWindow = (GameObject)Resources.Load("Prefabs/statusWindow");
-		Instantiate (statusWindow, GameObject.Find ("UI").transform);
+		var statusWindowPrf = (GameObject)Resources.Load("Prefabs/statusWindow");
+		statusWindow = Instantiate (statusWindowPrf, GameObject.Find ("UI").transform) as GameObject;
+		var swman = statusWindow.GetComponent<StatusWindowManager> ();
+		swman.updateText (status);
         return statusWindow;
     }
     public void deleteStatusWindow()
     {
         if (statusWindow != null)
         {
+			Debug.Log ("delete status window.");
             Destroy(statusWindow);
             statusWindow = null;
         }
     }
 	public void moveWorld(Vector3 pos) {
-		
-		transform.position = pos;
+		//Debug.Log ($"new pos: {pos}");
+		if (movableField.Contains (pos)) {
+			transform.position = pos;
+		}
 	}
 }

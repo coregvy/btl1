@@ -24,15 +24,26 @@ public class BgTile : MonoBehaviour
     {
 
     }
+
+	bool isShowStatusWindow = false;
     void OnMouseEnter()
     {
-        Debug.Log("mouse enter: " + name);
+        // Debug.Log("mouse enter: " + name);
         GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f);
+		var onChar = bgparent.onTileCharacter (this);
+		if (onChar != null) {
+			onChar.GetComponent<CharacterManager> ().openStatusWindow ();
+			isShowStatusWindow = true;
+		}
     }
     void OnMouseExit()
     {
-        Debug.Log("mouse exit: " + name);
+        // Debug.Log("mouse exit: " + name);
         GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f);
+		if (isShowStatusWindow) {
+			bgparent.deleteStatusWindow ();
+			isShowStatusWindow = false;
+		}
     }
 
     private Vector3 screenPoint;
@@ -42,10 +53,6 @@ public class BgTile : MonoBehaviour
         Debug.Log("bg mouse down: " + name);
         this.screenPoint = Camera.main.WorldToScreenPoint(transform.parent.transform.position);
         this.offset = transform.parent.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
-		var onChar = bgparent.onTileCharacter (this);
-		if (onChar != null) {
-			onChar.GetComponent<CharacterManager> ().openStatusWindow ();
-		}
     }
 
     void OnMouseDrag()
@@ -72,7 +79,7 @@ public class BgTile : MonoBehaviour
 		posX = x;
 		posY = y;
 		var pos = BgManager.getWorldPosition(x, y, -1);
-		Debug.Log("player pos: " + pos);
+		// Debug.Log("player pos: " + pos);
 		transform.position = pos;
 	}
 }
