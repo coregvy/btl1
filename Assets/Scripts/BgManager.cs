@@ -96,6 +96,10 @@ public class BgManager : MonoBehaviour
 		charMan.setBgManager (this);
         character.transform.localScale = new Vector2(6, 6);
         charMan.setPosition(posX, posY);
+		var cs = charMan.getCharacterStatus ();
+		// tmp
+		cs.hp = posX * 2;
+		cs.power = posY * 2;
         var anim = character.AddComponent<Animator>();
         anim.runtimeAnimatorController = RuntimeAnimatorController.Instantiate(Resources.Load<RuntimeAnimatorController>("aPlayer_0"));
         characters.Add(character);

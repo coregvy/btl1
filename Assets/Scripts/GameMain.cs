@@ -7,7 +7,7 @@ public sealed class GameMain
 {
     private static GameMain instance = new GameMain();
 
-    Scenes nowScene = Scenes.Title;
+	public Scenes nowScene{ get; set; }
     SystemConfig _systemConfig;
     GameConfig _gameConfig;
 
@@ -20,6 +20,7 @@ public sealed class GameMain
     }
     private GameMain()
     {
+		nowScene = Scenes.Title;
         _systemConfig = new SystemConfig();
         _systemConfig.tileScale = 20.0f;
         _systemConfig.tileSize = 0.16f;

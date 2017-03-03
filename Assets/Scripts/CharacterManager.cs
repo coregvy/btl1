@@ -11,9 +11,6 @@ public class CharacterManager : MonoBehaviour
     void Start()
     {
 		status.name = name;
-		status.hp = 10;
-		status.power = 5;
-        // status = new CharacterStatus ();
         // setPosition (3, 3);
     }
 
