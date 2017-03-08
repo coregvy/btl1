@@ -42,4 +42,8 @@ public class CharacterManager : MonoBehaviour
 		Debug.Log ("open status window: " + name);
 		bgMan.createStatusWindow(status);
     }
+    public void openControllWindow()
+    {
+        bgMan.createControllWindow(status);
+    }
 }

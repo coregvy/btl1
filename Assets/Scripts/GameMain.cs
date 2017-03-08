@@ -7,9 +7,9 @@ public sealed class GameMain
 {
     private static GameMain instance = new GameMain();
 
-	public Scenes nowScene{ get; set; }
     SystemConfig _systemConfig;
     GameConfig _gameConfig;
+    GameStatus _gameStatus;
 
     public static GameMain Instance
     {
@@ -20,7 +20,8 @@ public sealed class GameMain
     }
     private GameMain()
     {
-		nowScene = Scenes.Title;
+        _gameStatus = new GameStatus();
+        _gameStatus.nowScene = Scenes.Title;
         _systemConfig = new SystemConfig();
         _systemConfig.tileScale = 20.0f;
         _systemConfig.tileSize = 0.16f;
@@ -30,15 +31,8 @@ public sealed class GameMain
 
     public void changeScene(Scenes nextScene)
     {
-        nowScene = nextScene;
+        _gameStatus.nowScene = nextScene;
         SceneManager.LoadScene(nextScene.SceneName());
-    }
-
-    // test
-    int count = 0;
-    public int incrementCounter()
-    {
-        return count++;
     }
 
     public GameConfig gameConfig { get { return _gameConfig; } }

@@ -1,0 +1,3 @@
+BgMgrからplとかenの操作
+ChrMgrにステ窓表示func、Bgに共通func作ってそれを呼ぶ？
+Bgにステ窓けし

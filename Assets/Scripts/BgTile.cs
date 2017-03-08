@@ -68,6 +68,8 @@ public class BgTile : MonoBehaviour
         if (onChar!=null)
         {
             Debug.Log(onChar.name + " is on this tile. " + name);
+			var charMan = onChar.GetComponent<CharacterManager>();
+			bgparent.createControllWindow(charMan.getCharacterStatus());
         }
         else
         {

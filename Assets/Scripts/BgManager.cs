@@ -31,6 +31,7 @@ public class BgManager : MonoBehaviour
             new int[]{ 136,  107, 108, 109, 108, 109, 108, 109, 111, 112, 136 },
             new int[]{ 136, 136, 6, 136, 136, 136, 136, 91, 136, 136, 136 }
         };
+		baseTiles = new GameObject[tileY] [];
         //var tileBasePos = new Vector3(-6, 6, 0);
 
 		characters = new List<GameObject> ();
@@ -40,6 +41,7 @@ public class BgManager : MonoBehaviour
         // baseTiles = new GameObject[tileY][tileX];
         for (int y = 0; y < tileY; ++y)
         {
+			baseTiles [y] = new GameObject[tileX];
             for (int x = 0; x < tileX; ++x)
             {
                 var tile = new GameObject("Sprite" + x + "-" + y);
@@ -51,7 +53,7 @@ public class BgManager : MonoBehaviour
                 tileRenderer.transform.localScale = new Vector3(gameMain.systemConfig.tileScale, gameMain.systemConfig.tileScale);
                 tileRenderer.transform.parent = transform;
                 bgt.SetParent(this);
-                // baseTiles [y] [x] = tile;
+                baseTiles [y] [x] = tile;
             }
         }
         transform.position = new Vector3(-14, 6, 0);
@@ -127,10 +129,44 @@ public class BgManager : MonoBehaviour
             statusWindow = null;
         }
     }
+
+    Object controllWindow;
+    public Object createControllWindow(CharacterStatus status)
+    {
+        if(controllWindow != null)
+        {
+            return controllWindow;
+        }
+		var prefab = Resources.Load ("Prefabs/controllWindow");
+		controllWindow = Instantiate (prefab, GameObject.Find ("UI").transform);
+		var cwm = ((GameObject)controllWindow).GetComponent<ControllWindowManager> ();
+		cwm.setBgManager (this);
+		cwm.setCharacterStatus (status);
+        return controllWindow;
+    }
+    public void deleteControllWindow()
+    {
+        if(controllWindow!=null)
+        {
+            Debug.Log("delete controll window.");
+            Destroy(controllWindow);
+            controllWindow = null;
+        }
+    }
+
 	public void moveWorld(Vector3 pos) {
 		//Debug.Log ($"new pos: {pos}");
 		if (movableField.Contains (pos)) {
 			transform.position = pos;
+		}
+	}
+	public void updateTileColor(int centerX, int centerY, int dist, Color newColor) {
+		baseTiles [centerY] [centerX].GetComponent<SpriteRenderer> ().color = newColor;
+		for (int dx = -dist; dx < dist; ++dx) {
+			int distY = dist - (dx < 0 ? -dx : dx) + 1;
+			for (int dy = -distY; dy < distY; ++dy) {
+				baseTiles[centerX + dy][centerY + dx].GetComponent<SpriteRenderer> ().color = newColor;
+			}
 		}
 	}
 }
