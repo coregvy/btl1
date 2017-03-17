@@ -37,4 +37,5 @@ public sealed class GameMain
 
     public GameConfig gameConfig { get { return _gameConfig; } }
     public SystemConfig systemConfig { get { return _systemConfig; } }
+	public GameStatus gameStatus{ get { return _gameStatus; } }
 }

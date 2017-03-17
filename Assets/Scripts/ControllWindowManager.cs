@@ -6,6 +6,7 @@ using System;
 public class ControllWindowManager : MonoBehaviour {
 	// Dictionary<string, Action<string>> buttons;
 //	List<GameObject> buttons;
+	static GameMain gameMain = GameMain.Instance;
 
 	// Use this for initialization
 	void Start () {
@@ -18,7 +19,8 @@ public class ControllWindowManager : MonoBehaviour {
 		if ( GUI.Button(new Rect(260, 150, 200, 50), "Button1") ) {
 			Debug.Log ("pushed! 1");
 			bgMan.deleteControllWindow ();
-			bgMan.updateTileColor (charStatus.posX, charStatus.posY, 2, new Color (1, 0, 0));
+			bgMan.updateTileColor (charStatus, 2, new Color (1, 0, 0));
+			gameMain.gameStatus.ctrlStatus = ControllStatus.CharacterChooseTarget;
 		}
 		if ( GUI.Button(new Rect(260, 210, 200, 50), "Button2") ) {
 			Debug.Log ("pushed! 2");

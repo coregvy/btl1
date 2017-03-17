@@ -161,12 +161,17 @@ public class BgManager : MonoBehaviour
 		}
 	}
 	public void updateTileColor(int centerX, int centerY, int dist, Color newColor) {
+		if (gameMain.gameStatus.ctrlStatus != ControllStatus.Free)
+			return;
 		baseTiles [centerY] [centerX].GetComponent<SpriteRenderer> ().color = newColor;
-		for (int dx = -dist; dx < dist; ++dx) {
-			int distY = dist - (dx < 0 ? -dx : dx) + 1;
-			for (int dy = -distY; dy < distY; ++dy) {
+		for (int dx = -dist; dx <= dist; ++dx) {
+			int distY = dist - Mathf.Abs(dx);
+			for (int dy = -distY; dy <= distY; ++dy) {
 				baseTiles[centerX + dy][centerY + dx].GetComponent<SpriteRenderer> ().color = newColor;
 			}
 		}
+	}
+	public void updateTileColor(CharacterStatus cs, int dist, Color newColor) {
+		updateTileColor(cs.posX, cs.posY, dist, newColor);
 	}
 }

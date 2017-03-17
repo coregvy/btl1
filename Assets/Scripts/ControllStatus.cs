@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace AssemblyCSharp
+public enum ControllStatus
 {
-	public enum ControllStatus
-	{
-		Free,
-		CharacterMove,
-		CharacterAttack,
-	}
+	Free,
+	CharacterMove,
+	CharacterAttack,
+	CharacterChooseTarget,
 }
+
 

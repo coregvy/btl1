@@ -4,7 +4,8 @@ using System.Collections;
 [RequireComponent(typeof(BoxCollider2D))]
 public class BgTile : MonoBehaviour
 {
-
+	Color maskColor = new Color(1,1,1);
+	static GameMain gameMain = GameMain.Instance;
     BgManager bgparent;
 	public int posX{ get; private set; }
 	public int posY{ get; private set; }
@@ -28,6 +29,8 @@ public class BgTile : MonoBehaviour
 	bool isShowStatusWindow = false;
     void OnMouseEnter()
     {
+		if (gameMain.gameStatus.ctrlStatus != ControllStatus.Free)
+			return;
         // Debug.Log("mouse enter: " + name);
         GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f);
 		var onChar = bgparent.onTileCharacter (this);
@@ -38,6 +41,8 @@ public class BgTile : MonoBehaviour
     }
     void OnMouseExit()
     {
+		if (gameMain.gameStatus.ctrlStatus != ControllStatus.Free)
+			return;
         // Debug.Log("mouse exit: " + name);
         GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f);
 		if (isShowStatusWindow) {
