@@ -1,15 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class BgManager : MonoBehaviour
 {
-    GameObject[][] baseTiles;
-	[SerializeField]
-	Rect movableField = new Rect(-23,4,16,20);
+    BgTile[][] baseTiles;
+    [SerializeField]
+    Rect movableField = new Rect(-23, 4, 16, 20);
     static GameMain gameMain = GameMain.Instance;
     //static Vector2 tileBasePose = new Vector2(-6, 6);
-    List<GameObject> characters;
+    List<CharacterManager> characters;
 
     // Use this for initialization
     void Start()
@@ -31,33 +30,25 @@ public class BgManager : MonoBehaviour
             new int[]{ 136,  107, 108, 109, 108, 109, 108, 109, 111, 112, 136 },
             new int[]{ 136, 136, 6, 136, 136, 136, 136, 91, 136, 136, 136 }
         };
-		baseTiles = new GameObject[tileY] [];
+        baseTiles = new BgTile[tileY][];
         //var tileBasePos = new Vector3(-6, 6, 0);
-
-		characters = new List<GameObject> ();
-        createChar("char1", 3, 3);
-        createChar("char2", 4, 4);
 
         // baseTiles = new GameObject[tileY][tileX];
         for (int y = 0; y < tileY; ++y)
         {
-			baseTiles [y] = new GameObject[tileX];
+            baseTiles[y] = new BgTile[tileX];
             for (int x = 0; x < tileX; ++x)
             {
-                var tile = new GameObject("Sprite" + x + "-" + y);
-                var tileRenderer = tile.AddComponent<SpriteRenderer>();
-				var bgt = tile.AddComponent<BgTile> ();
-                tileRenderer.sprite = tiles[tileMap[y][x]];
-                // tileRenderer.transform.position = new Vector3(getWorldPositionX(x), getWorldPositionY(y), 10.0f);
-				bgt.setPosition (x, y);
-                tileRenderer.transform.localScale = new Vector3(gameMain.systemConfig.tileScale, gameMain.systemConfig.tileScale);
-                tileRenderer.transform.parent = transform;
-                bgt.SetParent(this);
-                baseTiles [y] [x] = tile;
+                baseTiles[y][x] = BgTile.createTile(x, y, tiles[tileMap[y][x]], this);
             }
         }
+
         transform.position = new Vector3(-14, 6, 0);
-		Debug.Log ($"movableField x: {movableField.xMin} - {movableField.xMax}");
+        Debug.Log($"movableField x: {movableField.xMin} - {movableField.xMax}");
+
+        characters = new List<CharacterManager>();
+        characters.Add(CharacterManager.createChar("char1", 3, 3, this));
+        characters.Add(CharacterManager.createChar("char2", 4, 4, this));
     }
 
     void Update()
@@ -65,13 +56,13 @@ public class BgManager : MonoBehaviour
 
     }
 
-    public GameObject onTileCharacter(BgTile tile)
+    public CharacterManager onTileCharacter(BgTile tile)
     {
         var tilePos = tile.transform.position;
-        foreach(var character in characters)
+        foreach (var character in characters)
         {
-			var cs = character.GetComponent<CharacterManager> ().getCharacterStatus ();
-			if (tile.posX == cs.posX && tile.posY == cs.posY)
+            var cs = character.GetComponent<CharacterManager>().getCharacterStatus();
+            if (tile.posX == cs.posX && tile.posY == cs.posY)
                 return character;
         }
         return null;
@@ -90,23 +81,6 @@ public class BgManager : MonoBehaviour
         return new Vector3(getWorldPositionX(x), getWorldPositionY(y), z);
     }
 
-    public void createChar(string name, int posX, int posY)
-    {
-        var character = new GameObject(name, typeof(SpriteRenderer));
-        var charMan = character.AddComponent<CharacterManager>();
-        charMan.transform.parent = transform;
-		charMan.setBgManager (this);
-        character.transform.localScale = new Vector2(6, 6);
-        charMan.setPosition(posX, posY);
-		var cs = charMan.getCharacterStatus ();
-		// tmp
-		cs.hp = posX * 2;
-		cs.power = posY * 2;
-        var anim = character.AddComponent<Animator>();
-        anim.runtimeAnimatorController = RuntimeAnimatorController.Instantiate(Resources.Load<RuntimeAnimatorController>("aPlayer_0"));
-        characters.Add(character);
-    }
-
     GameObject statusWindow;
     public GameObject createStatusWindow(CharacterStatus status)
     {
@@ -114,17 +88,17 @@ public class BgManager : MonoBehaviour
         {
             deleteStatusWindow();
         }
-		var statusWindowPrf = (GameObject)Resources.Load("Prefabs/statusWindow");
-		statusWindow = Instantiate (statusWindowPrf, GameObject.Find ("UI").transform) as GameObject;
-		var swman = statusWindow.GetComponent<StatusWindowManager> ();
-		swman.updateText (status);
+        var statusWindowPrf = (GameObject)Resources.Load("Prefabs/statusWindow");
+        statusWindow = Instantiate(statusWindowPrf, GameObject.Find("UI").transform) as GameObject;
+        var swman = statusWindow.GetComponent<StatusWindowManager>();
+        swman.updateText(status);
         return statusWindow;
     }
     public void deleteStatusWindow()
     {
         if (statusWindow != null)
         {
-			Debug.Log ("delete status window.");
+            Debug.Log("delete status window.");
             Destroy(statusWindow);
             statusWindow = null;
         }
@@ -133,20 +107,20 @@ public class BgManager : MonoBehaviour
     Object controllWindow;
     public Object createControllWindow(CharacterStatus status)
     {
-        if(controllWindow != null)
+        if (controllWindow != null)
         {
             return controllWindow;
         }
-		var prefab = Resources.Load ("Prefabs/controllWindow");
-		controllWindow = Instantiate (prefab, GameObject.Find ("UI").transform);
-		var cwm = ((GameObject)controllWindow).GetComponent<ControllWindowManager> ();
-		cwm.setBgManager (this);
-		cwm.setCharacterStatus (status);
+        var prefab = Resources.Load("Prefabs/controllWindow");
+        controllWindow = Instantiate(prefab, GameObject.Find("UI").transform);
+        var cwm = ((GameObject)controllWindow).GetComponent<ControllWindowManager>();
+        cwm.setBgManager(this);
+        cwm.setCharacterStatus(status);
         return controllWindow;
     }
     public void deleteControllWindow()
     {
-        if(controllWindow!=null)
+        if (controllWindow != null)
         {
             Debug.Log("delete controll window.");
             Destroy(controllWindow);
@@ -154,24 +128,34 @@ public class BgManager : MonoBehaviour
         }
     }
 
-	public void moveWorld(Vector3 pos) {
-		//Debug.Log ($"new pos: {pos}");
-		if (movableField.Contains (pos)) {
-			transform.position = pos;
-		}
-	}
-	public void updateTileColor(int centerX, int centerY, int dist, Color newColor) {
-		if (gameMain.gameStatus.ctrlStatus != ControllStatus.Free)
-			return;
-		baseTiles [centerY] [centerX].GetComponent<SpriteRenderer> ().color = newColor;
-		for (int dx = -dist; dx <= dist; ++dx) {
-			int distY = dist - Mathf.Abs(dx);
-			for (int dy = -distY; dy <= distY; ++dy) {
-				baseTiles[centerX + dy][centerY + dx].GetComponent<SpriteRenderer> ().color = newColor;
-			}
-		}
-	}
-	public void updateTileColor(CharacterStatus cs, int dist, Color newColor) {
-		updateTileColor(cs.posX, cs.posY, dist, newColor);
-	}
+    public void moveWorld(Vector3 pos)
+    {
+        //Debug.Log ($"new pos: {pos}");
+        if (movableField.Contains(pos))
+        {
+            transform.position = pos;
+        }
+    }
+    public void updateTileColor(int centerX, int centerY, int dist, Color newColor)
+    {
+        if (gameMain.gameStatus.ctrlStatus != ControllStatus.Free)
+            return;
+        baseTiles[centerY][centerX].GetComponent<BgTile>().setMaskColor(newColor);
+        for (int dx = -dist; dx <= dist; ++dx)
+        {
+            int distY = dist - Mathf.Abs(dx);
+            for (int dy = -distY; dy <= distY; ++dy)
+            {
+                baseTiles[centerX + dy][centerY + dx].GetComponent<BgTile>().setMaskColor(newColor);
+            }
+        }
+    }
+    public void updateTileColor(CharacterStatus cs, int dist, Color newColor)
+    {
+        updateTileColor(cs.posX, cs.posY, dist, newColor);
+    }
+    public BgTile getTile(int x, int y)
+    {
+        return baseTiles[y][x];
+    }
 }

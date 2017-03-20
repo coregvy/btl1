@@ -1,11 +1,9 @@
-﻿using System;
-
-public enum ControllStatus
+﻿public enum ControllStatus
 {
-	Free,
-	CharacterMove,
-	CharacterAttack,
-	CharacterChooseTarget,
+    Free,
+    CharacterMove,
+    CharacterAttack,
+    CharacterChooseTarget,
 }
 
 
