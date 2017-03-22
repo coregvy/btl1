@@ -1,4 +1,4 @@
-public class CharacterStatus
+public class CharacterInfo
 {
     public string name { get; set; }
     public int posX { get; set; }

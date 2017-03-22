@@ -25,7 +25,7 @@ public class StatusWindowManager : MonoBehaviour
         text = newmsg;
         // 	transform.FindChild ("Canvas").transform.FindChild ("Text").gameObject.GetComponent<Text>().text = newmsg;
     }
-    public void updateText(CharacterStatus status)
+	public void updateText(CharacterInfo status)
     {
         text = $@"{status.name}
 HP: {status.hp}   攻撃力: {status.power}

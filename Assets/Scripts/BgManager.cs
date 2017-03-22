@@ -19,7 +19,7 @@ public class BgManager : MonoBehaviour
         const int tileY = 10;
         // transform.position = new Vector3(basePose.x + tileSize * tileScale * 2.0f, basePose.y + tileSize * tileScale * 1.5f);
         int[][] tileMap = {
-            new int[]{ 136, 136, 113, 136, 49, 136, 136, 136, 136, 136, 136 },
+            new int[]{ 136, 136, 113,136, 49,136,136,136,136,136, 136 },
             new int[]{ 136,   0,   1,  3,  2,  3,  3,  4,  1,  5, 136 },
             new int[]{ 136,  22,  25, 88, 89, 88, 89, 88, 89, 90, 136 },
             new int[]{   6,  22,  26, 89, 88, 89, 88, 89, 88, 68, 136 },
@@ -27,11 +27,10 @@ public class BgManager : MonoBehaviour
             new int[]{ 136,  22,  26, 89, 88, 89, 88, 89, 88, 68, 136 },
             new int[]{ 136,  22,  25, 88, 89, 88, 89, 88, 89, 90, 136 },
             new int[]{ 136,  22,  26, 89, 88, 89, 88, 89, 88, 68, 136 },
-            new int[]{ 136,  107, 108, 109, 108, 109, 108, 109, 111, 112, 136 },
-            new int[]{ 136, 136, 6, 136, 136, 136, 136, 91, 136, 136, 136 }
+            new int[]{ 136, 107, 108,109,108,109,108,109,111,112, 136 },
+            new int[]{ 136, 136,   6,136,136,136,136, 91,136,136, 136 }
         };
         baseTiles = new BgTile[tileY][];
-        //var tileBasePos = new Vector3(-6, 6, 0);
 
         // baseTiles = new GameObject[tileY][tileX];
         for (int y = 0; y < tileY; ++y)
@@ -47,8 +46,9 @@ public class BgManager : MonoBehaviour
         Debug.Log($"movableField x: {movableField.xMin} - {movableField.xMax}");
 
         characters = new List<CharacterManager>();
-        characters.Add(CharacterManager.createChar("char1", 3, 3, this));
-        characters.Add(CharacterManager.createChar("char2", 4, 4, this));
+		characters.Add(CharacterManager.createChar("char1", "aPlayer_0", 3, 3, this));
+		characters.Add(CharacterManager.createChar("char2", "aPlayer_0", 4, 4, this));
+		characters.Add(CharacterManager.createChar("char3", "player2_0", 5, 5, this));
     }
 
     void Update()
@@ -61,7 +61,7 @@ public class BgManager : MonoBehaviour
         var tilePos = tile.transform.position;
         foreach (var character in characters)
         {
-            var cs = character.GetComponent<CharacterManager>().getCharacterStatus();
+			var cs = character.GetComponent<CharacterManager>().getCharacterInfo();
             if (tile.posX == cs.posX && tile.posY == cs.posY)
                 return character;
         }
@@ -82,7 +82,7 @@ public class BgManager : MonoBehaviour
     }
 
     GameObject statusWindow;
-    public GameObject createStatusWindow(CharacterStatus status)
+	public GameObject createStatusWindow(CharacterInfo status)
     {
         if (statusWindow != null)
         {
@@ -105,7 +105,7 @@ public class BgManager : MonoBehaviour
     }
 
     Object controllWindow;
-    public Object createControllWindow(CharacterStatus status)
+	public Object createControllWindow(CharacterInfo status)
     {
         if (controllWindow != null)
         {
@@ -115,7 +115,7 @@ public class BgManager : MonoBehaviour
         controllWindow = Instantiate(prefab, GameObject.Find("UI").transform);
         var cwm = ((GameObject)controllWindow).GetComponent<ControllWindowManager>();
         cwm.setBgManager(this);
-        cwm.setCharacterStatus(status);
+		cwm.setCharacterInfo(status);
         return controllWindow;
     }
     public void deleteControllWindow()
@@ -150,7 +150,7 @@ public class BgManager : MonoBehaviour
             }
         }
     }
-    public void updateTileColor(CharacterStatus cs, int dist, Color newColor)
+	public void updateTileColor(CharacterInfo cs, int dist, Color newColor)
     {
         updateTileColor(cs.posX, cs.posY, dist, newColor);
     }

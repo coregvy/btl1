@@ -5,8 +5,9 @@ using UnityEngine;
 public class CharacterManager : MonoBehaviour
 {
     public BgTile onTile { private get; set; }
+	private BgManager bgMan;
     [SerializeField]
-    CharacterStatus status = new CharacterStatus();
+	CharacterInfo status = new CharacterInfo();
     // Use this for initialization
     void Start()
     {
@@ -19,24 +20,25 @@ public class CharacterManager : MonoBehaviour
     {
 
     }
-    public void setPosition(int x, int y)
+	public void setPosition(int x, int y)
     {
         status.posX = x;
         status.posY = y;
         var pos = BgManager.getWorldPosition(x, y, -3);
         Debug.Log("player pos: " + pos);
         transform.localPosition = pos;
+		onTile = bgMan.getTile(x, y);
     }
 
-    public CharacterStatus getCharacterStatus()
+	public CharacterInfo getCharacterInfo()
     {
         return status;
     }
-    BgManager bgMan;
     public void setBgManager(BgManager bg)
     {
         bgMan = bg;
-    }
+		transform.parent = bgMan.transform;
+	}
 
     public void openStatusWindow()
     {
@@ -47,23 +49,24 @@ public class CharacterManager : MonoBehaviour
     {
         bgMan.createControllWindow(status);
     }
-    public static CharacterManager createChar(string name, int posX, int posY, BgManager bgMan)
+	public static CharacterManager createChar(string name, string animCtrl, int posX, int posY, BgManager bgMan)
     {
-        var character = new GameObject(name, typeof(SpriteRenderer));
-        var charMan = character.AddComponent<CharacterManager>();
-        charMan.transform.parent = bgMan.transform;
-        charMan.setBgManager(bgMan);
-        character.transform.localScale = new Vector2(6, 6);
-        charMan.setPosition(posX, posY);
-        charMan.onTile = bgMan.getTile(posX, posY).GetComponent<BgTile>();
-        var cs = charMan.getCharacterStatus();
-        // tmp
-        cs.hp = posX * 2;
-        cs.power = posY * 2;
-        var anim = character.AddComponent<Animator>();
-        anim.runtimeAnimatorController = RuntimeAnimatorController.Instantiate(Resources.Load<RuntimeAnimatorController>("aPlayer_0"));
-        //characters.Add(character);
+		var charMan = createChar(name, animCtrl);
+		charMan.setBgManager(bgMan);
+		charMan.setPosition(posX, posY);
+		var cs = charMan.getCharacterInfo();
+		// tmp
+		cs.hp = posX * 2;
+		cs.power = posY * 2;
         return charMan;
     }
 
+	private static CharacterManager createChar(string name, string animCtrl) {
+		var character = new GameObject(name, typeof(SpriteRenderer));
+		var charMan = character.AddComponent<CharacterManager>();
+		character.transform.localScale = new Vector2(6, 6);
+		var anim = character.AddComponent<Animator>();
+		anim.runtimeAnimatorController = RuntimeAnimatorController.Instantiate(Resources.Load<RuntimeAnimatorController>(animCtrl));
+		return charMan;
+	}
 }

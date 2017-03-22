@@ -39,8 +39,8 @@ public class ControllWindowManager : MonoBehaviour
     {
         bgMan = bg;
     }
-    CharacterStatus charStatus;
-    public void setCharacterStatus(CharacterStatus status)
+	CharacterInfo charStatus;
+	public void setCharacterInfo(CharacterInfo status)
     {
         charStatus = status;
     }

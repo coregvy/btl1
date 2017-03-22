@@ -2,5 +2,5 @@
 {
     public string windowTitle;
     public Scenes nowScene;
-	public ControllStatus ctrlStatus;
+    public ControllStatus ctrlStatus;
 }
