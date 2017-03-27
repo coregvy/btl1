@@ -25,10 +25,10 @@ public class StatusWindowManager : MonoBehaviour
         text = newmsg;
         // 	transform.FindChild ("Canvas").transform.FindChild ("Text").gameObject.GetComponent<Text>().text = newmsg;
     }
-	public void updateText(CharacterInfo status)
+    public void updateText(CharacterInfo status)
     {
-        text = $@"{status.name}
+        text = $@"{status.type}: {status.name}
 HP: {status.hp}   攻撃力: {status.power}
-射程: 1";
+射程: {status.attackRange}";
     }
 }

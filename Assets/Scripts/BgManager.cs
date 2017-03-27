@@ -38,7 +38,7 @@ public class BgManager : MonoBehaviour
             baseTiles[y] = new BgTile[tileX];
             for (int x = 0; x < tileX; ++x)
             {
-                baseTiles[y][x] = BgTile.createTile(x, y, tiles[tileMap[y][x]], this);
+                baseTiles[y][x] = BgTile.createTile(x, y, tiles[tileMap[y][x]], this, this.transform);
             }
         }
 
@@ -48,7 +48,9 @@ public class BgManager : MonoBehaviour
         characters = new List<CharacterManager>();
 		characters.Add(CharacterManager.createChar("char1", "aPlayer_0", 3, 3, this));
 		characters.Add(CharacterManager.createChar("char2", "aPlayer_0", 4, 4, this));
-		characters.Add(CharacterManager.createChar("char3", "player2_0", 5, 5, this));
+        var c3 = CharacterManager.createChar ("char3", "player2_0", 5, 5, this);
+        c3.getCharacterInfo ().type = CharacterType.Enemy;
+		characters.Add(c3);
     }
 
     void Update()

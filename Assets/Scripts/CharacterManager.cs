@@ -58,6 +58,7 @@ public class CharacterManager : MonoBehaviour
 		// tmp
 		cs.hp = posX * 2;
 		cs.power = posY * 2;
+        cs.attackRange = 1;
         return charMan;
     }
 
@@ -67,6 +68,8 @@ public class CharacterManager : MonoBehaviour
 		character.transform.localScale = new Vector2(6, 6);
 		var anim = character.AddComponent<Animator>();
 		anim.runtimeAnimatorController = RuntimeAnimatorController.Instantiate(Resources.Load<RuntimeAnimatorController>(animCtrl));
+        var ci = charMan.getCharacterInfo ();
+        ci.name = name;
 		return charMan;
 	}
 }

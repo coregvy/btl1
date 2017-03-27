@@ -113,7 +113,7 @@ public class BgTile : MonoBehaviour
         Debug.Log(name + ": add color x" + color + " -> " + maskColor);
         GetComponent<SpriteRenderer>().color = maskColor;
     }
-    public static BgTile createTile(int x, int y, Sprite tileSprite, BgManager bgMan)
+    public static BgTile createTile(int x, int y, Sprite tileSprite, BgManager bgMan, Transform parent)
     {
         var tile = new GameObject("Sprite" + x + "-" + y);
         var tileRenderer = tile.AddComponent<SpriteRenderer>();
@@ -122,7 +122,7 @@ public class BgTile : MonoBehaviour
         // tileRenderer.transform.position = new Vector3(getWorldPositionX(x), getWorldPositionY(y), 10.0f);
         bgt.setPosition(x, y);
         tileRenderer.transform.localScale = new Vector3(gameMain.systemConfig.tileScale, gameMain.systemConfig.tileScale);
-        tileRenderer.transform.parent = bgMan.transform;
+        tileRenderer.transform.parent = parent;
         bgt.SetParent(bgMan);
         return bgt;
     }
