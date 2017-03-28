@@ -1,10 +1,22 @@
+using System;
+using UnityEngine;
+
+[Serializable]
 public class CharacterInfo
 {
-    public string name { get; set; }
-    public CharacterType type{ get; set; }
-    public int posX { get; set; }
-    public int posY { get; set; }
-    public int hp{ get; set; }
-    public int power{ get; set; }
-    public int attackRange{ get; set; }
+    public string name;
+    public CharacterType type;
+    public int posX ;
+    public int posY ;
+    public int hp;
+    public int power;
+    public int attackRange;
+    public string animNameBase;
+    [SerializeField]
+    private CharacterAnimAct Action;
+    public CharacterAnimAct action
+    {
+        get { return Action; }
+        set { Action = value; }
+    }
 }

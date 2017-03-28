@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class BgTile : MonoBehaviour
@@ -35,6 +34,21 @@ public class BgTile : MonoBehaviour
         {
             onChar.GetComponent<CharacterManager>().openStatusWindow();
             isShowStatusWindow = true;
+        }
+        var sp = gameMain.gameStatus.selectedPlayer;
+        if (sp != null)
+        {
+            var ci = sp.getCharacterInfo();
+            var dx = posX - ci.posX;
+            var dy = posY - ci.posY;
+            if (dy > dx && dy < -dx)
+            {
+                sp.updateAnimator("w");
+            }
+            else // todo
+            {
+                sp.updateAnimator("s");
+            }
         }
     }
     void OnMouseExit()
@@ -73,8 +87,8 @@ public class BgTile : MonoBehaviour
         if (onChar != null)
         {
             Debug.Log(onChar.name + " is on this tile. " + name);
-            var charMan = onChar.GetComponent<CharacterManager>();
-			bgparent.createControllWindow(charMan.getCharacterInfo());
+            bgparent.createControllWindow(onChar.getCharacterInfo());
+            gameMain.gameStatus.selectedPlayer = onChar;
         }
         else
         {

@@ -31,6 +31,8 @@ public class BgManager : MonoBehaviour
             new int[]{ 136, 136,   6,136,136,136,136, 91,136,136, 136 }
         };
         baseTiles = new BgTile[tileY][];
+        var parent = new GameObject("TileBase");
+        parent.transform.parent = transform;
 
         // baseTiles = new GameObject[tileY][tileX];
         for (int y = 0; y < tileY; ++y)
@@ -38,7 +40,7 @@ public class BgManager : MonoBehaviour
             baseTiles[y] = new BgTile[tileX];
             for (int x = 0; x < tileX; ++x)
             {
-                baseTiles[y][x] = BgTile.createTile(x, y, tiles[tileMap[y][x]], this, this.transform);
+                baseTiles[y][x] = BgTile.createTile(x, y, tiles[tileMap[y][x]], this, parent.transform);
             }
         }
 
@@ -46,11 +48,11 @@ public class BgManager : MonoBehaviour
         Debug.Log($"movableField x: {movableField.xMin} - {movableField.xMax}");
 
         characters = new List<CharacterManager>();
-		characters.Add(CharacterManager.createChar("char1", "aPlayer_0", 3, 3, this));
-		characters.Add(CharacterManager.createChar("char2", "aPlayer_0", 4, 4, this));
-        var c3 = CharacterManager.createChar ("char3", "player2_0", 5, 5, this);
-        c3.getCharacterInfo ().type = CharacterType.Enemy;
-		characters.Add(c3);
+		characters.Add(CharacterManager.createChar("char1", "player1", 3, 3, this));
+		characters.Add(CharacterManager.createChar("char2", "player1", 4, 4, this));
+        var c3 = CharacterManager.createChar ("char3", "player2", 5, 5, this);
+        c3.getCharacterInfo().type = CharacterType.Enemy;
+        characters.Add(c3);
     }
 
     void Update()

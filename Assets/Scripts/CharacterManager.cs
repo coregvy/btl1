@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class CharacterManager : MonoBehaviour
 {
-    public BgTile onTile { private get; set; }
+    private BgTile onTile {  get;  set; }
 	private BgManager bgMan;
+    private string nowAnim;
     [SerializeField]
 	CharacterInfo status = new CharacterInfo();
     // Use this for initialization
@@ -66,10 +68,20 @@ public class CharacterManager : MonoBehaviour
 		var character = new GameObject(name, typeof(SpriteRenderer));
 		var charMan = character.AddComponent<CharacterManager>();
 		character.transform.localScale = new Vector2(6, 6);
-		var anim = character.AddComponent<Animator>();
-		anim.runtimeAnimatorController = RuntimeAnimatorController.Instantiate(Resources.Load<RuntimeAnimatorController>(animCtrl));
         var ci = charMan.getCharacterInfo ();
         ci.name = name;
-		return charMan;
+        ci.animNameBase = animCtrl;
+        charMan.updateAnimator("s");
+        //var anim = character.AddComponent<Animator>();
+        //anim.runtimeAnimatorController = RuntimeAnimatorController.Instantiate(Resources.Load<RuntimeAnimatorController>(animCtrl));
+        return charMan;
 	}
+    public void updateAnimator(string act)
+    {
+        var animName = status.animNameBase + "_" + act;
+        if (animName.Equals(nowAnim)) return;
+        var anim = GetComponent<Animator>();
+        anim.runtimeAnimatorController = RuntimeAnimatorController.Instantiate(Resources.Load<RuntimeAnimatorController>(animName));
+        nowAnim = animName;
+    }
 }
