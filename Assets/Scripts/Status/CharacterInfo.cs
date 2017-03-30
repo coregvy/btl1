@@ -12,11 +12,19 @@ public class CharacterInfo
     public int power;
     public int attackRange;
     public string animNameBase;
+
     [SerializeField]
     private CharacterAnimAct Action;
     public CharacterAnimAct action
     {
         get { return Action; }
-        set { Action = value; }
+        set { Action = value; charaMan.updateAnimator(action.ActionName()); }
+    }
+
+    [NonSerialized]
+    private CharacterManager charaMan;
+    public void setCharacterManager(CharacterManager characterManager)
+    {
+        charaMan = characterManager;
     }
 }

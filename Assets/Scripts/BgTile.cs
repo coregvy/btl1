@@ -43,11 +43,11 @@ public class BgTile : MonoBehaviour
             var dy = posY - ci.posY;
             if (dy > dx && dy < -dx)
             {
-                sp.updateAnimator("w");
+                ci.action = CharacterAnimAct.West;
             }
             else // todo
             {
-                sp.updateAnimator("s");
+                ci.action = CharacterAnimAct.South;
             }
         }
     }

@@ -13,6 +13,7 @@ public class CharacterManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        status.setCharacterManager(this);
         status.name = name;
         // setPosition (3, 3);
     }
@@ -51,9 +52,10 @@ public class CharacterManager : MonoBehaviour
     {
         bgMan.createControllWindow(status);
     }
+
 	public static CharacterManager createChar(string name, string animCtrl, int posX, int posY, BgManager bgMan)
     {
-		var charMan = createChar(name, animCtrl);
+		var charMan = createCharMain(name, animCtrl);
 		charMan.setBgManager(bgMan);
 		charMan.setPosition(posX, posY);
 		var cs = charMan.getCharacterInfo();
@@ -64,18 +66,22 @@ public class CharacterManager : MonoBehaviour
         return charMan;
     }
 
-	private static CharacterManager createChar(string name, string animCtrl) {
+	private static CharacterManager createCharMain(string name, string animCtrl) {
 		var character = new GameObject(name, typeof(SpriteRenderer));
 		var charMan = character.AddComponent<CharacterManager>();
 		character.transform.localScale = new Vector2(6, 6);
         var ci = charMan.getCharacterInfo ();
+        ci.setCharacterManager(charMan);
         ci.name = name;
-        ci.animNameBase = animCtrl;
-        charMan.updateAnimator("s");
-        //var anim = character.AddComponent<Animator>();
-        //anim.runtimeAnimatorController = RuntimeAnimatorController.Instantiate(Resources.Load<RuntimeAnimatorController>(animCtrl));
+        ci.animNameBase = "Animator/" + animCtrl;
+        ci.action = CharacterAnimAct.South;
         return charMan;
 	}
+
+    /// <summary>
+    /// CharacterInfo.setActionでのみ使用する.
+    /// </summary>
+    /// <param name="act">next action</param>
     public void updateAnimator(string act)
     {
         var animName = status.animNameBase + "_" + act;
