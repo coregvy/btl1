@@ -144,20 +144,22 @@ public class BgManager : MonoBehaviour
     {
         if (gameMain.gameStatus.ctrlStatus != ControllStatus.Free)
             return;
-        baseTiles[centerY][centerX].GetComponent<BgTile>().setMaskColor(newColor);
+        getTile(centerX, centerY).setMaskColor(newColor);
         for (int dx = -dist; dx <= dist; ++dx)
         {
             int distY = dist - Mathf.Abs(dx);
             for (int dy = -distY; dy <= distY; ++dy)
             {
-                baseTiles[centerX + dy][centerY + dx].GetComponent<BgTile>().setMaskColor(newColor);
+                getTile(centerY + dx, centerX + dy).setMaskColor(newColor);
             }
         }
     }
-	public void updateTileColor(CharacterInfo cs, int dist, Color newColor)
+
+	public void updateTileColor(CharacterInfo cs, Color newColor)
     {
-        updateTileColor(cs.posX, cs.posY, dist, newColor);
+        updateTileColor(cs.posX, cs.posY, cs.attackRange, newColor);
     }
+
     public BgTile getTile(int x, int y)
     {
         return baseTiles[y][x];

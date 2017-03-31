@@ -45,6 +45,14 @@ public class BgTile : MonoBehaviour
             {
                 ci.action = CharacterAnimAct.West;
             }
+            else if (dy <= -dx && dy <= dx)
+            {
+                ci.action = CharacterAnimAct.North;
+            }
+            else if (dy > -dx && dy < dx)
+            {
+                ci.action = CharacterAnimAct.East;
+            }
             else // todo
             {
                 ci.action = CharacterAnimAct.South;

@@ -48,3 +48,6 @@ A-Bª: (y-py) <= (x-px)  => y <= py - px + x
 B-A«: y > x
 B-Dª: y < -x
 
+C-A«: y > -x
+C-Dª: y < x
+
