@@ -2,34 +2,35 @@
 
 public class ControllWindowManager : MonoBehaviour
 {
-    // Dictionary<string, Action<string>> buttons;
-    //	List<GameObject> buttons;
     static GameMain gameMain = GameMain.Instance;
     CharacterInfo charStatus;
 
     // Use this for initialization
     void Start()
     {
-        //		buttons = new List<GameObject> ();
         Debug.Log("controll window start.");
-        //		var btnPrf = Resources.Load ("Prefabs/Button");
-        //		buttons.Add (Instantiate (btnPrf, GameObject.Find ("UI").transform) as GameObject);
     }
     void OnGUI()
     {
-        if (GUI.Button(new Rect(260, 150, 200, 50), "Button1"))
+        if (GUI.Button(new Rect(260, 150, 200, 50), "攻撃"))
         {
             Debug.Log("pushed! 1");
             // bgMan.deleteControllWindow();
             bgMan.updateTileColor(charStatus, new Color(1, 0, 0));
             gameMain.gameStatus.ctrlStatus = ControllStatus.CharacterChooseTarget;
         }
-        if (GUI.Button(new Rect(260, 210, 200, 50), "Button2"))
+        if (GUI.Button(new Rect(260, 210, 200, 50), "キャンセル"))
         {
             Debug.Log("pushed! 2");
             bgMan.deleteControllWindow();
-            gameMain.gameStatus.selectedPlayer = null;
-            bgMan.updateTileColor(charStatus, new Color(1, 1, 1));
+            var selPlayer = gameMain.gameStatus.selectedPlayer;
+            if(selPlayer != null) {
+                Debug.Log("selected player: " + selPlayer.name);
+                selPlayer.getCharacterInfo().action = CharacterAnimAct.South;
+                gameMain.gameStatus.ctrlStatus = ControllStatus.Free;
+                bgMan.updateTileColor(charStatus, new Color(1, 1, 1));
+                gameMain.gameStatus.selectedPlayer = null;
+            }
         }
     }
     // Update is called once per frame

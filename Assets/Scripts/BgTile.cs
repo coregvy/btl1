@@ -7,8 +7,9 @@ public class BgTile : MonoBehaviour
     Color beforeColor = new Color();
     static GameMain gameMain = GameMain.Instance;
     BgManager bgparent;
-    public int posX { get; private set; }
-    public int posY { get; private set; }
+    public PointXY position = new PointXY();
+    //public int posX { get; private set; }
+    //public int posY { get; private set; }
 
     public void SetParent(BgManager bgparent)
     {
@@ -39,8 +40,8 @@ public class BgTile : MonoBehaviour
         if (sp != null)
         {
             var ci = sp.getCharacterInfo();
-            var dx = posX - ci.posX;
-            var dy = posY - ci.posY;
+            var dx = position.x - ci.position.x;
+            var dy = position.y - ci.position.y;
             if (dy > dx && dy < -dx)
             {
                 ci.action = CharacterAnimAct.West;
@@ -105,8 +106,8 @@ public class BgTile : MonoBehaviour
     }
     public void setPosition(int x, int y)
     {
-        posX = x;
-        posY = y;
+        position.x = x;
+        position.y = y;
         var pos = BgManager.getWorldPosition(x, y, -1);
         // Debug.Log("player pos: " + pos);
         transform.position = pos;
@@ -114,14 +115,14 @@ public class BgTile : MonoBehaviour
 
     public void setMaskColor(Color color)
     {
-        Debug.Log(name + ": set color " + color);
+        //Debug.Log(name + ": set color " + color);
         beforeColor = maskColor;
         maskColor = color;
         GetComponent<SpriteRenderer>().color = maskColor;
     }
     public void setBeforeMaskColor()
     {
-        Debug.Log(name + ": set before color " + beforeColor);
+        //Debug.Log(name + ": set before color " + beforeColor);
         Color tmp = beforeColor;
         beforeColor = maskColor;
         maskColor = tmp;
@@ -132,7 +133,7 @@ public class BgTile : MonoBehaviour
     {
         beforeColor = maskColor;
         maskColor = color * maskColor;
-        Debug.Log(name + ": add color x" + color + " -> " + maskColor);
+        //Debug.Log(name + ": add color x" + color + " -> " + maskColor);
         GetComponent<SpriteRenderer>().color = maskColor;
     }
     public static BgTile createTile(int x, int y, Sprite tileSprite, BgManager bgMan, Transform parent)

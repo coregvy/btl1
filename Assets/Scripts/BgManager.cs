@@ -9,14 +9,18 @@ public class BgManager : MonoBehaviour
     static GameMain gameMain = GameMain.Instance;
     //static Vector2 tileBasePose = new Vector2(-6, 6);
     List<CharacterManager> characters;
+    [SerializeField]
+    float fDiv = 5f;
 
     // Use this for initialization
     void Start()
     {
-        Sprite[] tiles = Resources.LoadAll<Sprite>("baseTiles");
-        // var basePose = new Vector2(0, 0);
         const int tileX = 11;
         const int tileY = 10;
+        createTileMapWithPerlin(tileX, tileY);
+        /*
+        Sprite[] tiles = Resources.LoadAll<Sprite>("baseTiles");
+        // var basePose = new Vector2(0, 0);
         // transform.position = new Vector3(basePose.x + tileSize * tileScale * 2.0f, basePose.y + tileSize * tileScale * 1.5f);
         int[][] tileMap = {
             new int[]{ 136, 136, 113,136, 49,136,136,136,136,136, 136 },
@@ -43,16 +47,54 @@ public class BgManager : MonoBehaviour
                 baseTiles[y][x] = BgTile.createTile(x, y, tiles[tileMap[y][x]], this, parent.transform);
             }
         }
-
+        //*/
         transform.position = new Vector3(-14, 6, 0);
-        Debug.Log($"movableField x: {movableField.xMin} - {movableField.xMax}");
+        //Debug.Log("movableField x: " + movableField.xMin + " - " + movableField.xMax);
 
         characters = new List<CharacterManager>();
-		characters.Add(CharacterManager.createChar("char1", "player1", 3, 3, this));
-		characters.Add(CharacterManager.createChar("char2", "player1", 4, 4, this));
-        var c3 = CharacterManager.createChar ("char3", "player2", 5, 5, this);
+        characters.Add(CharacterManager.createChar("char1", "player1", 3, 3, this));
+        characters.Add(CharacterManager.createChar("char2", "player1", 4, 4, this));
+        var c3 = CharacterManager.createChar("char3", "player2", 5, 5, this);
         c3.getCharacterInfo().type = CharacterType.Enemy;
         characters.Add(c3);
+    }
+
+    private void createTileMapWithPerlin(int maxX, int maxY)
+    {
+        var parent = new GameObject("TileBase");
+        parent.transform.parent = transform;
+        float xf = Random.value * 100;
+        float yf = Random.value * 100;
+        Sprite[] tiles = Resources.LoadAll<Sprite>("baseTiles");
+        Debug.Log("tile len: " + tiles.Length);
+        baseTiles = new BgTile[maxY][];
+        for (int i = 0; i < maxY; ++i)
+        {
+            baseTiles[i] = new BgTile[maxX];
+            for (int j = 0; j < maxX; ++j)
+            {
+                float fRand = Random.value;
+                float noise = Mathf.PerlinNoise((i + xf) / fDiv, (j + yf) / fDiv);
+                int tileInd = 0;
+                if (noise < 0.25)
+                {
+                    tileInd = 158;
+                }
+                else if (noise < 0.5)
+                {
+                    tileInd = 73;
+                }
+                else if (noise < 0.75)
+                {
+                    tileInd = 136;
+                }
+                else
+                {
+                    tileInd = 153;
+                }
+                baseTiles[i][j] = BgTile.createTile(j, i, tiles[tileInd], this, parent.transform);
+            }
+        }
     }
 
     void Update()
@@ -65,8 +107,8 @@ public class BgManager : MonoBehaviour
         var tilePos = tile.transform.position;
         foreach (var character in characters)
         {
-			var cs = character.GetComponent<CharacterManager>().getCharacterInfo();
-            if (tile.posX == cs.posX && tile.posY == cs.posY)
+            var cs = character.GetComponent<CharacterManager>().getCharacterInfo();
+            if (tile.position == cs.position)
                 return character;
         }
         return null;
@@ -86,7 +128,7 @@ public class BgManager : MonoBehaviour
     }
 
     GameObject statusWindow;
-	public GameObject createStatusWindow(CharacterInfo status)
+    public GameObject createStatusWindow(CharacterInfo status)
     {
         if (statusWindow != null)
         {
@@ -109,7 +151,7 @@ public class BgManager : MonoBehaviour
     }
 
     Object controllWindow;
-	public Object createControllWindow(CharacterInfo status)
+    public Object createControllWindow(CharacterInfo status)
     {
         if (controllWindow != null)
         {
@@ -119,7 +161,7 @@ public class BgManager : MonoBehaviour
         controllWindow = Instantiate(prefab, GameObject.Find("UI").transform);
         var cwm = ((GameObject)controllWindow).GetComponent<ControllWindowManager>();
         cwm.setBgManager(this);
-		cwm.setCharacterInfo(status);
+        cwm.setCharacterInfo(status);
         return controllWindow;
     }
     public void deleteControllWindow()
@@ -142,26 +184,23 @@ public class BgManager : MonoBehaviour
     }
     public void updateTileColor(int centerX, int centerY, int dist, Color newColor)
     {
-        if (gameMain.gameStatus.ctrlStatus != ControllStatus.Free)
-            return;
-        getTile(centerX, centerY).setMaskColor(newColor);
-        for (int dx = -dist; dx <= dist; ++dx)
+        foreach (var pt in PointXY.getRange(new PointXY(centerX, centerY), dist))
         {
-            int distY = dist - Mathf.Abs(dx);
-            for (int dy = -distY; dy <= distY; ++dy)
-            {
-                getTile(centerY + dx, centerX + dy).setMaskColor(newColor);
-            }
+            getTile(pt).setMaskColor(newColor);
         }
     }
 
-	public void updateTileColor(CharacterInfo cs, Color newColor)
+    public void updateTileColor(CharacterInfo cs, Color newColor)
     {
-        updateTileColor(cs.posX, cs.posY, cs.attackRange, newColor);
+        updateTileColor(cs.position.x, cs.position.y, cs.attackRange, newColor);
     }
 
     public BgTile getTile(int x, int y)
     {
         return baseTiles[y][x];
+    }
+    public BgTile getTile(PointXY point)
+    {
+        return baseTiles[point.y][point.x];
     }
 }

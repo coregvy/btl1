@@ -6,10 +6,11 @@
 public class SceneChanger : MonoBehaviour
 {
     /// <summary>
-    /// GameObject側で設定する
+    /// set by GameObject
     /// </summary>
     [SerializeField]
     Scenes nextScene;
+
     public void ChangeScene()
     {
         Debug.Log("change scene -> " + nextScene.SceneName());

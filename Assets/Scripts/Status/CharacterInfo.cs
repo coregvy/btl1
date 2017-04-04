@@ -6,8 +6,9 @@ public class CharacterInfo
 {
     public string name;
     public CharacterType type;
-    public int posX ;
-    public int posY ;
+    public PointXY position;
+    //public int posX ;
+    //public int posY ;
     public int hp;
     public int power;
     public int attackRange;

@@ -25,10 +25,11 @@ public class CharacterManager : MonoBehaviour
     }
 	public void setPosition(int x, int y)
     {
-        status.posX = x;
-        status.posY = y;
+        //status.posX = x;
+        //status.posY = y;
+        status.position = new PointXY(x, y);
         var pos = BgManager.getWorldPosition(x, y, -3);
-        Debug.Log("player pos: " + pos);
+        //Debug.Log("player pos: " + pos);
         transform.localPosition = pos;
 		onTile = bgMan.getTile(x, y);
     }
@@ -62,7 +63,7 @@ public class CharacterManager : MonoBehaviour
 		// tmp
 		cs.hp = posX * 2;
 		cs.power = posY * 2;
-        cs.attackRange = 1;
+        cs.attackRange = 2;
         return charMan;
     }
 

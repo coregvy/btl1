@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine.SceneManagement;
 
 public sealed class GameMain
 {
@@ -24,7 +21,7 @@ public sealed class GameMain
         _gameStatus.nowScene = Scenes.Title;
         _systemConfig = new SystemConfig();
         _systemConfig.tileScale = 20.0f;
-        _systemConfig.tileSize = 0.16f;
+        _systemConfig.tileSize = 0.14f;
         _gameConfig = new GameConfig();
     }
 

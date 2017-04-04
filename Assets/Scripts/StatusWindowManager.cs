@@ -27,8 +27,8 @@ public class StatusWindowManager : MonoBehaviour
     }
     public void updateText(CharacterInfo status)
     {
-        text = $@"{status.type}: {status.name}
-HP: {status.hp}   攻撃力: {status.power}
-射程: {status.attackRange}";
+        text = status.type + ": " + status.name +
+            "\nHP: " + status.hp + "   攻撃力: " + status.power +
+            "\n射程: " + status.attackRange;
     }
 }
