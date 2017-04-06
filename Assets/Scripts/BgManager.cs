@@ -151,7 +151,7 @@ public class BgManager : MonoBehaviour
     }
 
     Object controllWindow;
-    public Object createControllWindow(CharacterInfo status)
+    public Object createControllWindow(CharacterManager cm)
     {
         if (controllWindow != null)
         {
@@ -161,7 +161,7 @@ public class BgManager : MonoBehaviour
         controllWindow = Instantiate(prefab, GameObject.Find("UI").transform);
         var cwm = ((GameObject)controllWindow).GetComponent<ControllWindowManager>();
         cwm.setBgManager(this);
-        cwm.setCharacterInfo(status);
+        cwm.setCharacter(cm);
         return controllWindow;
     }
     public void deleteControllWindow()

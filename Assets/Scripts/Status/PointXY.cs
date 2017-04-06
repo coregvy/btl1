@@ -47,4 +47,20 @@ public class PointXY
     {
         return !(pt1 == pt2);
     }
+    public override bool Equals(object obj)
+    {
+        if(obj is PointXY)
+        {
+            return (obj as PointXY) == this;
+        }
+        return false;
+    }
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+    public override string ToString()
+    {
+        return "{x:" + x + ",y:" + y + "}";
+    }
 }

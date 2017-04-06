@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -44,15 +45,36 @@ public class CharacterManager : MonoBehaviour
 		transform.parent = bgMan.transform;
 	}
 
+    public void prepareMove()
+    {
+        createDummy();
+    }
+    GameObject dummy;
+    private void createDummy()
+    {
+        dummy = Instantiate(gameObject);
+    }
+
+    public void endMove()
+    {
+        var newPos = dummy.GetComponent<CharacterManager>().getCharacterInfo().position;
+        setPosition(newPos.x, newPos.y);
+        Destroy(dummy);
+    }
+    public void cancelMove()
+    {
+        Destroy(dummy);
+    }
+
     public void openStatusWindow()
     {
         Debug.Log("open status window: " + name);
         bgMan.createStatusWindow(status);
     }
-    public void openControllWindow()
-    {
-        bgMan.createControllWindow(status);
-    }
+    //public void openControllWindow()
+    //{
+    //    bgMan.createControllWindow(status);
+    //}
 
 	public static CharacterManager createChar(string name, string animCtrl, int posX, int posY, BgManager bgMan)
     {

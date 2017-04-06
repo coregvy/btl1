@@ -30,6 +30,10 @@ public class BgTile : MonoBehaviour
         //Debug.Log("mouse enter: " + name);
         //GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f);
         addMaskColor(new Color(0.5f, 0.5f, 0.5f));
+        if(gameMain.gameStatus.ctrlStatus == ControllStatus.CharacterChooseMove)
+        {
+
+        }
         var onChar = bgparent.onTileCharacter(this);
         if (onChar != null)
         {
@@ -96,8 +100,7 @@ public class BgTile : MonoBehaviour
         if (onChar != null)
         {
             Debug.Log(onChar.name + " is on this tile. " + name);
-            bgparent.createControllWindow(onChar.getCharacterInfo());
-            gameMain.gameStatus.selectedPlayer = onChar;
+            bgparent.createControllWindow(onChar);
         }
         else
         {

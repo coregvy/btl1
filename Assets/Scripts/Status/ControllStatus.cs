@@ -3,7 +3,8 @@
     Free,
     CharacterMove,
     CharacterAttack,
-    CharacterChooseTarget,
+    CharacterChooseAttack,
+    CharacterChooseMove,
 }
 
 
