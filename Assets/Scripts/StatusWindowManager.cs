@@ -8,7 +8,7 @@ public class StatusWindowManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Debug.Log("sw man start.");
+        Debug.Log("status window man start.");
         statusText = transform.FindChild("Canvas").transform.FindChild("Text").gameObject.GetComponent<Text>();
         //text  = statusText.text = "set ok!!";
     }

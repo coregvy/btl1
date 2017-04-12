@@ -8,6 +8,9 @@ public class BgTile : MonoBehaviour
     static GameMain gameMain = GameMain.Instance;
     BgManager bgparent;
     public PointXY position = new PointXY();
+    [SerializeField]
+    TileStatus status = TileStatus.None;
+    TileStatus beforeStatus = TileStatus.None;
     //public int posX { get; private set; }
     //public int posY { get; private set; }
 
@@ -27,13 +30,21 @@ public class BgTile : MonoBehaviour
     {
         //if (gameMain.gameStatus.ctrlStatus != ControllStatus.Free)
         //    return;
-        //Debug.Log("mouse enter: " + name);
         //GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 0.5f);
-        addMaskColor(new Color(0.5f, 0.5f, 0.5f));
-        if(gameMain.gameStatus.ctrlStatus == ControllStatus.CharacterChooseMove)
+        var gStatus = gameMain.gameStatus.ctrlStatus;
+        Debug.Log("mouse enter: " + name + ", gs: " + gStatus + ", ts: " + status);
+        if (gStatus == ControllStatus.CharacterChooseMove)
         {
-
+            if (status == TileStatus.Movable)
+            {
+                bgparent.updateDummyPosition(position);
+            }
+            else
+            {
+                bgparent.hideDummy();
+            }
         }
+        addMaskColor(new Color(0.5f, 0.5f, 0.5f));
         var onChar = bgparent.onTileCharacter(this);
         if (onChar != null)
         {
@@ -85,6 +96,10 @@ public class BgTile : MonoBehaviour
         Debug.Log("bg mouse down: " + name);
         this.screenPoint = Camera.main.WorldToScreenPoint(transform.parent.transform.position);
         this.offset = transform.parent.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z));
+        if (status == TileStatus.Movable)
+        {
+            bgparent.endMoveDummy();
+        }
     }
 
     void OnMouseDrag()
@@ -116,21 +131,31 @@ public class BgTile : MonoBehaviour
         transform.position = pos;
     }
 
+    public void setMaskColor(Color color, TileStatus newStatus)
+    {
+        setMaskColor(color);
+        status = newStatus;
+    }
     public void setMaskColor(Color color)
     {
         //Debug.Log(name + ": set color " + color);
         beforeColor = maskColor;
         maskColor = color;
         GetComponent<SpriteRenderer>().color = maskColor;
+        beforeStatus = status;
     }
     public void setBeforeMaskColor()
     {
         //Debug.Log(name + ": set before color " + beforeColor);
+        // swap beforeColor <-> maskColor
         Color tmp = beforeColor;
         beforeColor = maskColor;
         maskColor = tmp;
         GetComponent<SpriteRenderer>().color = maskColor;
-        //setMaskColor(beforeColor);
+        // swap beforeStatus <-> status
+        TileStatus tmps = beforeStatus;
+        beforeStatus = status;
+        status = tmps;
     }
     public void addMaskColor(Color color)
     {

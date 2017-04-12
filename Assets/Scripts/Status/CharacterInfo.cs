@@ -12,6 +12,7 @@ public class CharacterInfo
     public int hp;
     public int power;
     public int attackRange;
+    public int moveRange;
     public string animNameBase;
 
     [SerializeField]
@@ -27,5 +28,9 @@ public class CharacterInfo
     public void setCharacterManager(CharacterManager characterManager)
     {
         charaMan = characterManager;
+    }
+    public CharacterInfo()
+    {
+        position = new PointXY();
     }
 }

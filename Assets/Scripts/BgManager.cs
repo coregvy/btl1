@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿//using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BgManager : MonoBehaviour
@@ -57,6 +58,36 @@ public class BgManager : MonoBehaviour
         var c3 = CharacterManager.createChar("char3", "player2", 5, 5, this);
         c3.getCharacterInfo().type = CharacterType.Enemy;
         characters.Add(c3);
+    }
+
+    CharacterManager moveDummy = null;
+    public void setMoveDummy(CharacterManager dummy)
+    {
+        moveDummy = dummy;
+    }
+
+    public void deleteMoveDummy()
+    {
+        moveDummy = null;
+    }
+
+    public void updateDummyPosition(PointXY pos)
+    {
+        Debug.Log(moveDummy.name + ": update dummy new position: " + pos);
+        moveDummy.setPosition(pos);
+    }
+
+    public void hideDummy()
+    {
+        var pos = moveDummy.transform.localPosition;
+        pos.z = 10;
+        moveDummy.transform.localPosition = pos;
+    }
+
+    public void endMoveDummy()
+    {
+        moveDummy.endMove();
+        deleteMoveDummy();
     }
 
     private void createTileMapWithPerlin(int maxX, int maxY)
@@ -150,7 +181,7 @@ public class BgManager : MonoBehaviour
         }
     }
 
-    Object controllWindow;
+    GameObject controllWindow;
     public Object createControllWindow(CharacterManager cm)
     {
         if (controllWindow != null)
@@ -158,8 +189,8 @@ public class BgManager : MonoBehaviour
             return controllWindow;
         }
         var prefab = Resources.Load("Prefabs/controllWindow");
-        controllWindow = Instantiate(prefab, GameObject.Find("UI").transform);
-        var cwm = ((GameObject)controllWindow).GetComponent<ControllWindowManager>();
+        controllWindow = Instantiate(prefab, GameObject.Find("UI").transform) as GameObject;
+        var cwm = controllWindow.GetComponent<ControllWindowManager>();
         cwm.setBgManager(this);
         cwm.setCharacter(cm);
         return controllWindow;
@@ -169,6 +200,7 @@ public class BgManager : MonoBehaviour
         if (controllWindow != null)
         {
             Debug.Log("delete controll window.");
+            controllWindow.GetComponent<ControllWindowManager>().deleteWindow();
             Destroy(controllWindow);
             controllWindow = null;
         }
@@ -182,17 +214,17 @@ public class BgManager : MonoBehaviour
             transform.position = pos;
         }
     }
-    public void updateTileColor(int centerX, int centerY, int dist, Color newColor)
+    public void updateTileColor(int centerX, int centerY, int dist, Color newColor, TileStatus newStatus)
     {
         foreach (var pt in PointXY.getRange(new PointXY(centerX, centerY), dist))
         {
-            getTile(pt).setMaskColor(newColor);
+            getTile(pt).setMaskColor(newColor, newStatus);
         }
     }
 
-    public void updateTileColor(CharacterInfo cs, Color newColor)
+    public void updateTileColor(CharacterInfo cs, int dist, Color newColor, TileStatus newStatus = TileStatus.None)
     {
-        updateTileColor(cs.position.x, cs.position.y, cs.attackRange, newColor);
+        updateTileColor(cs.position.x, cs.position.y, dist, newColor, newStatus);
     }
 
     public BgTile getTile(int x, int y)

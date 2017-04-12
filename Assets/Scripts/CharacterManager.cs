@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 public class CharacterManager : MonoBehaviour
@@ -26,16 +23,23 @@ public class CharacterManager : MonoBehaviour
     }
 	public void setPosition(int x, int y)
     {
+        Debug.Log(name + ": move " + status.position + " -> (" + x + ", " + y + ")");
         //status.posX = x;
         //status.posY = y;
-        status.position = new PointXY(x, y);
+        status.position.x = x;
+        status.position.y = y;
         var pos = BgManager.getWorldPosition(x, y, -3);
         //Debug.Log("player pos: " + pos);
         transform.localPosition = pos;
 		onTile = bgMan.getTile(x, y);
     }
 
-	public CharacterInfo getCharacterInfo()
+    public void setPosition(PointXY pos)
+    {
+        setPosition(pos.x, pos.y);
+    }
+
+    public CharacterInfo getCharacterInfo()
     {
         return status;
     }
@@ -43,27 +47,47 @@ public class CharacterManager : MonoBehaviour
     {
         bgMan = bg;
 		transform.parent = bgMan.transform;
+        status.setCharacterManager(this);
 	}
 
     public void prepareMove()
     {
+        // ControllStatusはcwmで設定
+        Debug.Log(name + ": prepare move begin.");
         createDummy();
+        bgMan.updateTileColor(status, status.moveRange, new Color(0, 1, 0), TileStatus.Movable);
     }
+
     GameObject dummy;
     private void createDummy()
     {
         dummy = Instantiate(gameObject);
+        dummy.name = name + "-dummy";
+        var cm = dummy.GetComponent<CharacterManager>();
+        cm.setBgManager(bgMan);
+        cm.setPosition(status.position);
+        cm.status.action = CharacterAnimAct.South;
+        dummy.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+        bgMan.setMoveDummy(cm);
     }
 
     public void endMove()
     {
+        Debug.Log(name + ": end move and set new position.");
         var newPos = dummy.GetComponent<CharacterManager>().getCharacterInfo().position;
+        cancelMove();
         setPosition(newPos.x, newPos.y);
-        Destroy(dummy);
     }
     public void cancelMove()
     {
+        GameMain.Instance.gameStatus.ctrlStatus = ControllStatus.Free;
+        // 移動前に
+        bgMan.updateTileColor(status, status.moveRange, new Color(1, 1, 1), TileStatus.None);
+        bgMan.deleteMoveDummy();
         Destroy(dummy);
+        dummy = null;
+        GameMain.Instance.gameStatus.ctrlStatus = ControllStatus.Free;
+        bgMan.deleteControllWindow();
     }
 
     public void openStatusWindow()
@@ -86,6 +110,7 @@ public class CharacterManager : MonoBehaviour
 		cs.hp = posX * 2;
 		cs.power = posY * 2;
         cs.attackRange = 2;
+        cs.moveRange = 3;
         return charMan;
     }
 

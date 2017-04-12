@@ -9,7 +9,7 @@ public class SceneChanger : MonoBehaviour
     /// set by GameObject
     /// </summary>
     [SerializeField]
-    Scenes nextScene;
+    Scenes nextScene = Scenes.Title;
 
     public void ChangeScene()
     {
