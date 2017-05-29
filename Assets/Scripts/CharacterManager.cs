@@ -3,11 +3,11 @@
 [RequireComponent(typeof(Animator))]
 public class CharacterManager : MonoBehaviour
 {
-    private BgTile onTile {  get;  set; }
-	private BgManager bgMan;
+    private BgTile onTile { get; set; }
+    private BgManager bgMan;
     private string nowAnim;
     [SerializeField]
-	CharacterInfo status = new CharacterInfo();
+    CharacterInfo status = new CharacterInfo();
     // Use this for initialization
     void Start()
     {
@@ -21,7 +21,7 @@ public class CharacterManager : MonoBehaviour
     {
 
     }
-	public void setPosition(int x, int y)
+    public void setPosition(int x, int y)
     {
         Debug.Log(name + ": move " + status.position + " -> (" + x + ", " + y + ")");
         //status.posX = x;
@@ -31,7 +31,7 @@ public class CharacterManager : MonoBehaviour
         var pos = BgManager.getWorldPosition(x, y, -3);
         //Debug.Log("player pos: " + pos);
         transform.localPosition = pos;
-		onTile = bgMan.getTile(x, y);
+        onTile = bgMan.getTile(x, y);
     }
 
     public void setPosition(PointXY pos)
@@ -46,9 +46,9 @@ public class CharacterManager : MonoBehaviour
     public void setBgManager(BgManager bg)
     {
         bgMan = bg;
-		transform.parent = bgMan.transform;
+        transform.parent = bgMan.transform;
         status.setCharacterManager(this);
-	}
+    }
 
     public void prepareMove()
     {
@@ -100,31 +100,32 @@ public class CharacterManager : MonoBehaviour
     //    bgMan.createControllWindow(status);
     //}
 
-	public static CharacterManager createChar(string name, string animCtrl, int posX, int posY, BgManager bgMan)
+    public static CharacterManager createChar(string name, string animCtrl, int posX, int posY, BgManager bgMan)
     {
-		var charMan = createCharMain(name, animCtrl);
-		charMan.setBgManager(bgMan);
-		charMan.setPosition(posX, posY);
-		var cs = charMan.getCharacterInfo();
-		// tmp
-		cs.hp = posX * 2;
-		cs.power = posY * 2;
+        var charMan = createCharMain(name, animCtrl);
+        charMan.setBgManager(bgMan);
+        charMan.setPosition(posX, posY);
+        var cs = charMan.getCharacterInfo();
+        // tmp
+        cs.hp = posX * 2;
+        cs.power = posY * 2;
         cs.attackRange = 2;
         cs.moveRange = 3;
         return charMan;
     }
 
-	private static CharacterManager createCharMain(string name, string animCtrl) {
-		var character = new GameObject(name, typeof(SpriteRenderer));
-		var charMan = character.AddComponent<CharacterManager>();
-		character.transform.localScale = new Vector2(6, 6);
-        var ci = charMan.getCharacterInfo ();
+    private static CharacterManager createCharMain(string name, string animCtrl)
+    {
+        var character = new GameObject(name, typeof(SpriteRenderer));
+        var charMan = character.AddComponent<CharacterManager>();
+        character.transform.localScale = new Vector2(6, 6);
+        var ci = charMan.getCharacterInfo();
         ci.setCharacterManager(charMan);
         ci.name = name;
         ci.animNameBase = "Animator/" + animCtrl;
         ci.action = CharacterAnimAct.South;
         return charMan;
-	}
+    }
 
     /// <summary>
     /// CharacterInfo.setActionでのみ使用する.
